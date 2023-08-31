@@ -34,6 +34,26 @@ class CartController extends AbstractController
     }
 
 
+    #[Route('/add/{id}', name:'add')]
+     public function add(Products $product, SessionInterface $session)
+    {
+        // On récupère le panier actuel
+        $panier = $session->get("panier", []);
+        $id = $product->getId();
+
+        if(!empty($panier[$id])){
+            $panier[$id]++;
+        }else{
+            $panier[$id] = 1;
+        }
+
+        // On sauvegarde dans la session
+        $session->set("panier", $panier);
+
+        return $this->redirectToRoute("cart_index");
+    }
+
+
 #[Route('/remove/{id}', name:'remove')]
 public function remove(Products $product, SessionInterface $session)
 {
